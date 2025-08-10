@@ -3,28 +3,25 @@ export default {
   data() {
     return {
       userInput: [String, Date],
-      text: new String(),
-      date: new Date(),
+      text: '' as string,
+      date: new Date as Date,
     }
   },
   methods: {
     insertDate(value: Date) {
       this.date = value;
     },
-    insertText(value: String) {
+    insertText(value: string) {
       this.text = value;
     },
     sendData() {
-      // Assuming you want to navigate to another page with the data
       this.$router.push({
-        name: 'NextPage', // Replace with your actual route name
+        name: 'About',
         query: {
           text: this.text,
-          date: this.date.toISOString() // Convert date to string if needed
+          date: this.date.toISOString()
         }
       });
-      // You can also use this.$emit('dataSent', { text: this.text, date: this.date }) 
-      // if you want to emit an event instead of navigating
     }
   }
 }
@@ -54,6 +51,21 @@ export default {
       </button>
     </p>
    </form>
+   
+    <p>
+      <router-link to="/about">
+        Go to About
+      </router-link>
+    </p>
+    <p>
+      <router-link to="/">
+        Go to Home
+      </router-link>
+    </p>
+    <a href="/about">
+      Go to About
+    </a>
+   
   </main>
 </template>
 
