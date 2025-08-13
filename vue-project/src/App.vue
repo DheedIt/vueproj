@@ -6,24 +6,7 @@ export default {
       text: '' as string,
       date: new Date as Date,
     }
-  },
-  methods: {
-    insertDate(value: Date) {
-      this.date = value;
-    },
-    insertText(value: string) {
-      this.text = value;
-    },
-    sendData() {
-      this.$router.push({
-        name: 'About',
-        query: {
-          text: this.text,
-          date: this.date.toISOString()
-        }
-      });
-    }
-  }
+  }   
 }
 </script>
 
