@@ -29,43 +29,12 @@ export default {
 
 <template>
   <header>
+    <h1>Vue 3 test project with TypeScript</h1>
   </header>
-
   <main>
-   <!-- <p>{{ text }}</p>
-   <p>Today's date is: {{ date }}</p> -->
-
-   <form>
-      <input type="text"
-        v-model="text" 
-        placeholder="text" />
-    <p>
-      <input
-        type="date"
-        v-model="date"
-        placeholder="date" />
-    </p>
-    <p>
-      <button @click="sendData()" type="button">
-        Go to next page
-      </button>
-    </p>
-   </form>
-   
-    <p>
-      <router-link to="/about">
-        Go to About
-      </router-link>
-    </p>
-    <p>
-      <router-link to="/">
-        Go to Home
-      </router-link>
-    </p>
-    <a href="/about">
-      Go to About
-    </a>
-   
+    <router-link to="/">Home</router-link> |
+    <router-link to="/next">Next</router-link>
+    <router-view :key="$route.fullPath" />
   </main>
 </template>
 
