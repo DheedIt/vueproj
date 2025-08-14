@@ -1,11 +1,33 @@
 <template>
-    <div>
+    <header>
         <h2>
             <p>Text: {{ $route.query.text }}</p>
             <p>Date: {{ $route.query.date }}</p>
         </h2>
+    </header>
+    <body>
+    <div class="addUsers">
         <button v-if="isUploadDataAvailable" @click="addUsers(); disableDataUpload()">Add Users</button>
         <p v-if="isLoading"> Loading </p>
+    </div>
+    <div class="filterTable">
+        <form method="get">
+            <p>
+                <label for="filter"> Filter by </label>
+                    <select name="users" id="filter"  v-model="selectedFilter">
+                        <option value="">--Choose an option--</option>
+                        <option value="byName">Name</option>
+                        <option value="byId">Id</option>
+                        <option value="byRole">Role</option>
+                    </select>
+            </p>
+        </form>
+    </div>
+    <div class="inputFilter">
+        <label for="userInput"> Search: </label>
+        <input type="text" id="userInput" v-model="searchQuery" placeholder="Type to filter...">
+    </div>
+    <div class="userTable">
         <table>
             <caption>Data from Home</caption>
             <thead>
@@ -17,7 +39,7 @@
             </thead>
 
             <tbody>
-                <tr v-for="user in users" :key="user.id">
+                <tr v-for="user in sortedUsers" :key="user.id">
                     <td>{{ user.id }}</td>
                     <td>{{ user.name }}</td>
                     <td>{{ user.age }}</td>
@@ -26,10 +48,11 @@
             </tbody>
         </table>
     </div>
+    </body>
 </template>
 
 <script lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 interface User {
     id: number
@@ -41,6 +64,32 @@ export default {
     name: "NextItem",
     setup() {
 
+        const isUploadDataAvailable = ref(true)
+        const isLoading = ref(false)
+        const selectedFilter = ref<string>('')
+        const searchQuery = ref<string>('')
+
+        const sortedUsers = computed(() => {
+            let list = users.value.slice();
+            if(searchQuery.value) list = list.filter(u => u.name.toLowerCase().includes(searchQuery.value.toLowerCase()));
+            switch(selectedFilter.value){
+                case 'byName':
+                    return list.sort((a, b) => a.name.localeCompare(b.name));
+                case 'byId':
+                    return list.sort((a, b) => a.id - b.id);
+                case 'byRole':
+                    return list.sort((a, b) => a.role.localeCompare(b.role));
+                default:
+                    return list;
+            }
+        })
+        
+        const filtredUsers = computed(() => {
+            const query = searchQuery.value.toLowerCase();
+            if(!query) return users.value.slice();
+            return sortedUsers.value.filter(u => u.name.toLocaleLowerCase().includes(query))
+
+        })
         const users = ref<User[]>([
             { id: 1, name: "John Doe", age: 30, role: "Admin" },
             { id: 2, name: "Jane Smith", age: 25, role: "User" },
@@ -70,8 +119,7 @@ export default {
             { id: 16, name: "Lewis Hamilton", age: 39, role: "Driver" }
         ]
 
-        const isUploadDataAvailable = ref(true)
-        const isLoading = ref(false)
+        
 
         const addUsers = async () => {
             isLoading.value = true
@@ -82,17 +130,19 @@ export default {
             console.log('Users added successfully');
         }
 
-        const disableDataUpload = () => {
-            isUploadDataAvailable.value = false
-        }
-
+        const disableDataUpload = () => {isUploadDataAvailable.value = false}
+     
         return {
             users,
             columns,
             isUploadDataAvailable,
             addUsers,
             disableDataUpload,
-            isLoading
+            isLoading,
+            selectedFilter,
+            sortedUsers,
+            searchQuery,
+            filtredUsers
         }
     }
 }
