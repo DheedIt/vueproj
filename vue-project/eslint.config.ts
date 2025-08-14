@@ -15,7 +15,7 @@ export default defineConfigWithVueTs(
 
   globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**']),
 
-  pluginVue.configs['flat/essential'],
   vueTsConfigs.strictTypeChecked,
-  vueTsConfigs.stylisticTypeChecked
+  vueTsConfigs.stylisticTypeChecked,
+  pluginVue.configs['flat/essential'],
 )

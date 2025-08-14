@@ -1,13 +1,8 @@
 <script lang="ts">
-export default {
-  data() {
-    return {
-      userInput: [String, Date],
-      text: '' as string,
-      date: new Date as Date,
-    }
-  }   
-}
+ export default{
+
+};
+
 </script>
 
 <template>
